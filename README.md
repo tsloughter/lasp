@@ -21,3 +21,7 @@ Start 2 nodes:
 
 * `rebar3 shell --sname lasp1 --config config/app1.config`
 * `rebar3 shell --sname lasp2 --config config/app2.config`
+
+Join the nodes:
+
+* `(lasp1@<NODE>)1> lasp_console:join(["lasp2@<NODE>"]).`
