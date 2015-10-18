@@ -13,18 +13,11 @@ See all of our papers, examples, and installation guides on the [official Lasp w
 
 ## Building
 
-* `make`: Compile Lasp.
-* `make rel`: Build a single release.
-* `make stage`: Build a single staging release.
-* `make devrel`: Build six development releases.
-* `make stagedevrel`: Build six development releases, symlinked to the same source.
+* `rebar3 compile`
 
-## Testing
+## Running
 
-* `make test` will run the unit and QuickCheck tests.
-* `make riak-test` will run the integration tests.
+Start 2 nodes:
 
-## Riak Core Backend
-
-The Riak Core backend for Lasp is **deprecated**.  If you need it for
-it, the last supported release is tagged `riak-core-distribution`.
+* `rebar3 shell --sname lasp1 --config config/app1.config`
+* `rebar3 shell --sname lasp2 --config config/app2.config`
