@@ -137,6 +137,7 @@
 -define(ADS_NUMBER, 1).
 
 -define(DEFAULT_DISTRIBUTION_BACKEND, lasp_default_broadcast_distribution_backend).
+-define(PEER_REFRESH_INTERVAL, 10000).
 
 %% Lexer and parser.
 -define(SQL_LEXER, lasp_sql_lexer).

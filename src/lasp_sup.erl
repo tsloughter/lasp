@@ -71,7 +71,7 @@ init(_Args) ->
     end,
     case os:getenv("PEER_PORT", "false") of
         "false" ->
-            partisan_config:set(peer_port, random_port()),
+            %% use the random default
             ok;
         PeerPort ->
             partisan_config:set(peer_port, list_to_integer(PeerPort)),
@@ -167,12 +167,8 @@ web_specs() ->
     %%
     case os:getenv("WEB_PORT", "false") of
         "false" ->
-            case lasp_config:get(web_port, undefined) of
-                undefined ->
-                    lasp_config:set(web_port, random_port());
-                _ ->
-                    ok
-            end;
+            %% use the already configured random default
+            ok;
         WebPort ->
             lasp_config:set(web_port, list_to_integer(WebPort)),
             ok
@@ -390,13 +386,6 @@ advertisement_counter_child_specs() ->
     ClientSpecs ++ ServerSpecs.
 
 %% @private
-random_port() ->
-    {ok, Socket} = gen_tcp:listen(0, []),
-    {ok, {_, Port}} = inet:sockname(Socket),
-    ok = gen_tcp:close(Socket),
-    Port.
-
-%% @private
 game_tournament_child_specs() ->
     %% Figure out who is acting as the client.
     TournClientDefault = list_to_atom(os:getenv("TOURNAMENT_SIM_CLIENT", "false")),
@@ -445,4 +434,3 @@ game_tournament_child_specs() ->
     end,
 
     ClientSpecs ++ ServerSpecs.
-

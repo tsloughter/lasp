@@ -71,7 +71,6 @@
 -define(DELTA_GC_INTERVAL, 60000).
 -define(PLUMTREE_MEMORY_INTERVAL, 10000).
 -define(MEMORY_UTILIZATION_INTERVAL, 10000).
--define(PEER_REFRESH_INTERVAL, 10000).
 
 %% Definitions for the bind/read fun abstraction.
 

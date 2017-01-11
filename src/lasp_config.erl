@@ -23,18 +23,65 @@
 
 -include("lasp.hrl").
 
--export([dispatch/0,
+-export([init/0,
+         dispatch/0,
          set/2,
+         get/1,
          get/2,
          peer_service_manager/0,
          web_config/0]).
 
+init() ->
+    [env_or_default(Key, Default) ||
+        {Key, Default} <- [{aae_interval, 10000},
+                           {automatic_contraction, false},
+                           {broadcast, false},
+                           {client_number, 3},
+                           {dag_enabled, false},
+                           {delta_interval, 10000},
+                           {distribution_backend, ?DEFAULT_DISTRIBUTION_BACKEND},
+                           {evaluation_identifier, undefined},
+                           {evaluation_timestamp, 0},
+                           {extended_logging, false},
+                           {heartbeat_interval, 10000},
+                           {heavy_client, false},
+                           {instrumentation, false},
+                           {jitter, false},
+                           {join_decompositions, false},
+                           {lasp_server, undefined},
+                           {mailbox_logging, false},
+                           {max_players, ?MAX_PLAYERS_DEFAULT},
+                           {memory_report, false},
+                           {mode, state_based},
+                           {partition_probability, 0},
+                           {peer_refresh_interval, ?PEER_REFRESH_INTERVAL},
+                           {reactive_server, false},
+                           {simulation, undefined},
+                           {storage_backend, lasp_ets_storage_backend},
+                           {tutorial, false},
+                           {web_port, random_port()},
+                           {peer_port, random_port()}]],
+    ok.
+
+env_or_default(Key, Default) ->
+    case application:get_env(lasp, Key) of
+        undefined ->
+            set(Key, Default);
+        {ok, undefined} ->
+            set(Key, Default);
+        {ok, Value} ->
+            set(Key, Value)
+    end.
+
+get(Key) ->
+    lasp_mochiglobal:get(Key).
+
 get(Key, Default) ->
-    mochiglobal:get(Key, Default).
+    lasp_mochiglobal:get(Key, Default).
 
 set(Key, Value) ->
     application:set_env(?APP, Key, Value),
-    mochiglobal:put(Key, Value).
+    lasp_mochiglobal:put(Key, Value).
 
 dispatch() ->
     lists:flatten([
@@ -66,3 +113,10 @@ web_config() ->
 peer_service_manager() ->
     partisan_config:get(partisan_peer_service_manager,
                         partisan_default_peer_service_manager).
+
+%% @private
+random_port() ->
+    {ok, Socket} = gen_tcp:listen(0, []),
+    {ok, {_, Port}} = inet:sockname(Socket),
+    ok = gen_tcp:close(Socket),
+    Port.

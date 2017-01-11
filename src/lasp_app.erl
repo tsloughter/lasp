@@ -33,6 +33,7 @@
 
 %% @doc Start the lasp application.
 start(_StartType, _StartArgs) ->
+    lasp_config:init(),
     case lasp_sup:start_link() of
         {ok, Pid} ->
             {ok, Pid};
