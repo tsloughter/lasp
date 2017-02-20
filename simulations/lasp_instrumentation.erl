@@ -128,6 +128,8 @@ log_files() ->
 %% @private
 -spec init([term()]) -> {ok, #state{}}.
 init([]) ->
+    application:ensure_all_started(sprinter),
+
     LogDir = log_dir(),
     filelib:ensure_dir(LogDir),
 
